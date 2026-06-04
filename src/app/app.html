@@ -1,6 +1,6 @@
 <header class="header">
   <div class="logo">
-    <a routerLink="/home" style="text-decoration: none;">
+    <a href="#" style="text-decoration: none;">
       <svg viewBox="0 0 40 40" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
         <circle cx="20" cy="20" r="20" fill="#202329"/>
         <text x="50%" y="50%" fill="white" font-size="12" font-weight="bold" text-anchor="middle" dy=".3em">R&M</text>
@@ -8,17 +8,50 @@
     </a>
   </div>
   <nav class="nav-links">
-    <a routerLink="/home" routerLinkActive="active">Inicio</a>
-    <a routerLink="/search" routerLinkActive="active">Búsqueda</a>
-    <a routerLink="/favorites" routerLinkActive="active">Favoritos</a>
     <a href="#">Documentación</a>
     <a href="#">Acerca de</a>
     <a href="#" class="btn-support">APÓYANOS</a>
   </nav>
 </header>
 
-<main class="main-router">
-  <router-outlet></router-outlet>
+<section class="hero">
+  <div class="hero-background"></div>
+  <h1 class="hero-title">The Rick and Morty API</h1>
+</section>
+
+<main class="content">
+  <div class="cards-grid">
+    @for (character of characters; track character.id) {
+      <article class="character-card">
+        <div class="card-image">
+          <img [src]="character.image" [alt]="character.name" />
+        </div>
+        <div class="card-content">
+          <div class="section">
+            <h2 class="name">{{ character.name }}</h2>
+            <span class="status">
+              <span class="status-icon" [ngClass]="{
+                'alive': character.status === 'Alive',
+                'dead': character.status === 'Dead',
+                'unknown': character.status === 'unknown'
+              }"></span>
+              {{ character.status }} - {{ character.species }}
+            </span>
+          </div>
+
+          <div class="section">
+            <span class="text-gray">Last known location:</span>
+            <a href="#" class="location-link">{{ character.location.name }}</a>
+          </div>
+
+          <div class="section">
+            <span class="text-gray">First seen in:</span>
+            <a href="#" class="location-link">Chapter {{ character.episode[0].split('/').pop() }}</a>
+          </div>
+        </div>
+      </article>
+    }
+  </div>
 </main>
 
 <footer class="footer">

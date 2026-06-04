@@ -15,7 +15,7 @@ export class App implements OnInit {
   private characterService = inject(CharacterService);
   private platformId = inject(PLATFORM_ID);
 
-  characters: Character[] = [];
+  characters = signal<Character[]>([]);
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -23,7 +23,7 @@ export class App implements OnInit {
       this.characterService.getCharacters().subscribe({
         next: (response) => {
           console.log('¡Conexión exitosa! Datos obtenidos:', response);
-          this.characters = response.results;
+          this.characters.set(response.results);
         },
         error: (error) => {
           console.error('Error al obtener los datos:', error);

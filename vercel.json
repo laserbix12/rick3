@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "outputDirectory": "dist/rick3/browser",
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}

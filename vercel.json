@@ -1,4 +1,10 @@
 {
   "version": 2,
-  "outputDirectory": "dist/rick3/browser"
+  "outputDirectory": "dist/rick3/browser",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }

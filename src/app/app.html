@@ -14,46 +14,7 @@
   </nav>
 </header>
 
-<section class="hero">
-  <div class="hero-background"></div>
-  <h1 class="hero-title">The Rick and Morty API</h1>
-</section>
-
-<main class="content">
-  <div class="cards-grid">
-    @for (character of characters(); track character.id) {
-      <article class="character-card">
-        <div class="card-image">
-          <img [src]="character.image" [alt]="character.name" />
-        </div>
-        <div class="card-content">
-          <div class="section">
-            <h2 class="name">{{ character.name }}</h2>
-            <span class="status">
-              <span class="status-icon" [ngClass]="{
-                'alive': character.status === 'Alive',
-                'dead': character.status === 'Dead',
-                'unknown': character.status === 'unknown'
-              }"></span>
-              {{ character.status }} - {{ character.species }}
-            </span>
-          </div>
-
-          <div class="section">
-            <span class="text-gray">Last known location:</span>
-            <a href="#" class="location-link">{{ character.location.name }}</a>
-          </div>
-
-          <div class="section">
-            <span class="text-gray">First seen in:</span>
-            <a href="#" class="location-link">Chapter {{ character.episode[0].split('/').pop() }}</a>
-          </div>
-        </div>
-      </article>
-    }
-  </div>
-</main>
-
+<router-outlet></router-outlet>
 <footer class="footer">
   <div class="footer-stats">
     <span class="stat-item">CHARACTERS: 826</span>

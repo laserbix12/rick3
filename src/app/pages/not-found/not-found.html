@@ -1,6 +1,23 @@
-<div class="not-found-container">
-  <h1>404</h1>
-  <h2>Página no encontrada</h2>
-  <p>La página a la que intentas acceder no existe en este universo.</p>
-  <a routerLink="/" class="back-btn">Volver al inicio</a>
+<div class="error-container">
+  <div class="error-content">
+    <h1 class="glitch-title">404</h1>
+    
+    <div class="subtitle-container">
+      <span class="dot"></span>
+      <span class="subtitle">ERROR - RUTA NO ENCONTRADA</span>
+    </div>
+    
+    <h2 class="game-over">¡GAME OVER!</h2>
+    <h3 class="universe-text">ESTA PÁGINA NO EXISTE EN NUESTRO UNIVERSO</h3>
+    
+    <div class="description">
+      <p>La ruta que intentas alcanzar no está en el mapa del juego.</p>
+      <p>El astronauta también está perdido — vuelve al inicio.</p>
+    </div>
+    
+    <div class="actions">
+      <a routerLink="/home" class="btn-primary">VOLVER AL INICIO</a>
+      <a routerLink="/favorites" class="btn-secondary">MIS FAVORITOS</a>
+    </div>
+  </div>
 </div>

@@ -26,7 +26,7 @@
   font-size: 14rem;
   line-height: 1;
   margin: 0;
-  color: #ff003c;
+  color: #39ff14;
   text-shadow: 0 0 20px rgba(255, 0, 60, 0.6), 0 0 40px rgba(255, 0, 60, 0.4);
   letter-spacing: 5px;
 }
@@ -42,13 +42,13 @@
 .dot {
   width: 6px;
   height: 6px;
-  background-color: #ff003c;
+  background-color: #39ff14;
   border-radius: 50%;
-  box-shadow: 0 0 5px #ff003c;
+  box-shadow: 0 0 5px #39ff14;
 }
 
 .subtitle {
-  color: #ff003c;
+  color: #39ff14;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 2px;
@@ -63,7 +63,7 @@
 }
 
 .universe-text {
-  color: #ff003c;
+  color: #39ff14;
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 1px;
@@ -101,20 +101,20 @@
 }
 
 .btn-primary {
-  background-color: #ff003c;
+  background-color: #39ff14;
   color: white;
   border: none;
   
   &:hover {
-    background-color: #cc0030;
+    background-color: #20c20e;
     box-shadow: 0 0 15px rgba(255, 0, 60, 0.5);
   }
 }
 
 .btn-secondary {
   background-color: transparent;
-  color: #ff003c;
-  border: 1px solid #ff003c;
+  color: #39ff14;
+  border: 1px solid #39ff14;
   /* Clip-path doesn't play well with borders directly, so we emulate border */
   position: relative;
   clip-path: none;
@@ -123,7 +123,7 @@
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    border: 2px solid #ff003c;
+    border: 2px solid #39ff14;
     clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
     transition: all 0.3s ease;
   }

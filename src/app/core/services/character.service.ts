@@ -40,4 +40,8 @@ export class CharacterService {
   getCharacters(page: number = 1): Observable<CharacterResponse> {
     return this.http.get<CharacterResponse>(`${this.apiUrl}/character?page=${page}`);
   }
+
+  searchCharacters(name: string, page: number = 1): Observable<CharacterResponse> {
+    return this.http.get<CharacterResponse>(`${this.apiUrl}/character/?name=${name}&page=${page}`);
+  }
 }

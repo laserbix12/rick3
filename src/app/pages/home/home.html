@@ -1,12 +1,36 @@
 <section class="hero">
   <div class="hero-background"></div>
   <h1 class="hero-title">The Rick and Morty API</h1>
+  
+  <div class="search-input-wrapper">
+    <input 
+      type="text" 
+      placeholder="Type a character name..." 
+      [value]="query()" 
+      (input)="query.set($any($event.target).value)"
+      class="search-input"
+    />
+    <div class="search-icon">🔍</div>
+  </div>
 </section>
 
 <main class="content">
-  <div class="cards-grid">
-    @for (character of characters(); track character.id) {
-      <app-character-card [character]="character"></app-character-card>
-    }
-  </div>
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Searching the multiverse...</p>
+    </div>
+  } @else if (hasError() && query().trim() !== '') {
+    <div class="empty-state">
+      <img src="https://rickandmortyapi.com/api/character/avatar/19.jpeg" alt="No results" class="empty-image" />
+      <h2>No characters found!</h2>
+      <p>Looks like this character doesn't exist in any dimension.</p>
+    </div>
+  } @else {
+    <div class="cards-grid">
+      @for (character of characters(); track character.id) {
+        <app-character-card [character]="character"></app-character-card>
+      }
+    </div>
+  }
 </main>

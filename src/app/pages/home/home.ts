@@ -1,6 +1,8 @@
 import { Component, OnInit, inject, signal, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime, distinctUntilChanged, switchMap, map, catchError, tap, of } from 'rxjs';
 import { CharacterService, Character } from '../../core/services/character.service';
 import { CharacterCardComponent } from '../../components/character-card/character-card';
 
@@ -15,19 +17,58 @@ export class HomeComponent implements OnInit {
   private characterService = inject(CharacterService);
   private platformId = inject(PLATFORM_ID);
   
-  characters = signal<Character[]>([]);
+  query = signal<string>('');
+  loading = signal<boolean>(false);
+  hasError = signal<boolean>(false);
+
+  private query$ = toObservable(this.query);
+
+  characters = toSignal(
+    this.query$.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      tap(() => {
+        this.loading.set(true);
+        this.hasError.set(false);
+      }),
+      switchMap((searchTerm) => {
+        if (!isPlatformBrowser(this.platformId)) {
+          return of([]);
+        }
+
+        if (!searchTerm.trim()) {
+          // Cargar personajes por defecto si no hay busqueda
+          return this.characterService.getCharacters().pipe(
+            map(res => {
+              this.loading.set(false);
+              return res.results;
+            }),
+            catchError(() => {
+              this.loading.set(false);
+              this.hasError.set(true);
+              return of([]);
+            })
+          );
+        }
+        
+        // Buscar personajes reales
+        return this.characterService.searchCharacters(searchTerm).pipe(
+          map(res => {
+            this.loading.set(false);
+            return res.results;
+          }),
+          catchError(() => {
+            this.loading.set(false);
+            this.hasError.set(true);
+            return of([]);
+          })
+        );
+      })
+    ),
+    { initialValue: [] as Character[] }
+  );
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      console.log('Iniciando fetching de datos en Home...');
-      this.characterService.getCharacters().subscribe({
-        next: (response) => {
-          this.characters.set(response.results);
-        },
-        error: (error) => {
-          console.error('Error al obtener los datos:', error);
-        }
-      });
-    }
+    // Ya no es necesario cargar aqui porque toSignal maneja la carga inicial
   }
 }

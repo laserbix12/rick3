@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, switchMap, map, catchError, tap, of } from 'rxjs';
@@ -10,6 +10,7 @@ import { CharacterCardComponent } from '../../components/character-card/characte
   standalone: true,
   imports: [CommonModule, CharacterCardComponent],
   templateUrl: './search.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './search.scss',
 })
 export class Search {
@@ -39,7 +40,7 @@ export class Search {
           return of([]);
         }
         return this.characterService.searchCharacters(searchTerm).pipe(
-          map(res => {
+          map((res) => {
             this.loading.set(false);
             return res.results;
           }),
@@ -47,10 +48,10 @@ export class Search {
             this.loading.set(false);
             this.hasError.set(true);
             return of([]);
-          })
+          }),
         );
-      })
+      }),
     ),
-    { initialValue: [] as Character[] }
+    { initialValue: [] as Character[] },
   );
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location, CommonModule } from '@angular/common';
 import { CharacterService, Character } from '../../core/services/character.service';
@@ -8,6 +8,7 @@ import { CharacterService, Character } from '../../core/services/character.servi
   standalone: true,
   imports: [CommonModule],
   templateUrl: './details.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './details.scss',
 })
 export class Details implements OnInit {
@@ -48,7 +49,7 @@ export class Details implements OnInit {
         console.error('Error fetching character details:', err);
         this.error.set('Failed to load character details.');
         this.loading.set(false);
-      }
+      },
     });
   }
 

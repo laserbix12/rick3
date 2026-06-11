@@ -12,19 +12,43 @@
 } @else if (character()) {
   <div class="details-container">
     <button class="back-btn sticky-back" (click)="goBack()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="m15 18-6-6 6-6" />
+      </svg>
       Volver
     </button>
-    
+
     <div class="hero-section">
-      <div class="hero-bg" [ngStyle]="{'background-image': 'url(' + character()?.image + ')'}"></div>
+      <div
+        class="hero-bg"
+        [ngStyle]="{
+          'background-image': 'url(' + $safeNavigationMigration(character()?.image) + ')',
+        }"
+      ></div>
       <div class="hero-content">
         <div class="avatar-container">
-          <img [src]="character()?.image" [alt]="character()?.name" class="avatar-img">
+          <img
+            [src]="$safeNavigationMigration(character()?.image)"
+            [alt]="$safeNavigationMigration(character()?.name)"
+            class="avatar-img"
+          />
         </div>
         <h1 class="character-name">{{ character()?.name }}</h1>
         <div class="status-badge">
-          <span class="status-icon" [ngClass]="character()?.status?.toLowerCase() || 'unknown'"></span>
+          <span
+            class="status-icon"
+            [ngClass]="character()?.status?.toLowerCase() || 'unknown'"
+          ></span>
           {{ character()?.status }} - {{ character()?.species }}
         </div>
       </div>
@@ -52,7 +76,9 @@
           </div>
           <div class="info-item">
             <span class="label">Creado en API</span>
-            <span class="value">{{ character()?.created | date:'mediumDate' }}</span>
+            <span class="value">{{
+              $safeNavigationMigration(character()?.created) | date: 'mediumDate'
+            }}</span>
           </div>
         </div>
       </div>

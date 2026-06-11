@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Character } from '../../core/services/character.service';
 
@@ -7,7 +7,8 @@ import { Character } from '../../core/services/character.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './character-card.html',
-  styleUrl: './character-card.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './character-card.scss',
 })
 export class CharacterCardComponent {
   character = input.required<Character>();

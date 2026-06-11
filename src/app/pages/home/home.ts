@@ -1,4 +1,11 @@
-import { Component, OnInit, inject, signal, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  signal,
+  PLATFORM_ID,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -11,12 +18,13 @@ import { CharacterCardComponent } from '../../components/character-card/characte
   standalone: true,
   imports: [CommonModule, RouterModule, CharacterCardComponent],
   templateUrl: './home.html',
-  styleUrl: './home.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './home.scss',
 })
 export class HomeComponent implements OnInit {
   private characterService = inject(CharacterService);
   private platformId = inject(PLATFORM_ID);
-  
+
   query = signal<string>('');
   loading = signal<boolean>(false);
   hasError = signal<boolean>(false);
@@ -39,7 +47,7 @@ export class HomeComponent implements OnInit {
         if (!searchTerm.trim()) {
           // Cargar personajes por defecto si no hay busqueda
           return this.characterService.getCharacters().pipe(
-            map(res => {
+            map((res) => {
               this.loading.set(false);
               return res.results;
             }),
@@ -47,13 +55,13 @@ export class HomeComponent implements OnInit {
               this.loading.set(false);
               this.hasError.set(true);
               return of([]);
-            })
+            }),
           );
         }
-        
+
         // Buscar personajes reales
         return this.characterService.searchCharacters(searchTerm).pipe(
-          map(res => {
+          map((res) => {
             this.loading.set(false);
             return res.results;
           }),
@@ -61,11 +69,11 @@ export class HomeComponent implements OnInit {
             this.loading.set(false);
             this.hasError.set(true);
             return of([]);
-          })
+          }),
         );
-      })
+      }),
     ),
-    { initialValue: [] as Character[] }
+    { initialValue: [] as Character[] },
   );
 
   ngOnInit(): void {

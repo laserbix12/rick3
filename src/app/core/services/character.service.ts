@@ -44,4 +44,8 @@ export class CharacterService {
   searchCharacters(name: string, page: number = 1): Observable<CharacterResponse> {
     return this.http.get<CharacterResponse>(`${this.apiUrl}/character/?name=${name}&page=${page}`);
   }
+
+  getCharacterById(id: number): Observable<Character> {
+    return this.http.get<Character>(`${this.apiUrl}/character/${id}`);
+  }
 }

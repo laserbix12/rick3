@@ -1,1 +1,70 @@
-<p>details works!</p>
+@if (loading()) {
+  <div class="loader-container">
+    <div class="spinner"></div>
+    <p>Cargando detalles...</p>
+  </div>
+} @else if (error()) {
+  <div class="error-container">
+    <h2>Oops!</h2>
+    <p>{{ error() }}</p>
+    <button class="back-btn" (click)="goBack()">Volver</button>
+  </div>
+} @else if (character()) {
+  <div class="details-container">
+    <button class="back-btn sticky-back" (click)="goBack()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Volver
+    </button>
+    
+    <div class="hero-section">
+      <div class="hero-bg" [ngStyle]="{'background-image': 'url(' + character()?.image + ')'}"></div>
+      <div class="hero-content">
+        <div class="avatar-container">
+          <img [src]="character()?.image" [alt]="character()?.name" class="avatar-img">
+        </div>
+        <h1 class="character-name">{{ character()?.name }}</h1>
+        <div class="status-badge">
+          <span class="status-icon" [ngClass]="character()?.status?.toLowerCase() || 'unknown'"></span>
+          {{ character()?.status }} - {{ character()?.species }}
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-card">
+        <h3>Información General</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Género</span>
+            <span class="value">{{ character()?.gender }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Tipo</span>
+            <span class="value">{{ character()?.type || 'Desconocido' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Origen</span>
+            <span class="value">{{ character()?.origin?.name }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Ubicación Actual</span>
+            <span class="value">{{ character()?.location?.name }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Creado en API</span>
+            <span class="value">{{ character()?.created | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>Episodios ({{ character()?.episode?.length }})</h3>
+        <div class="episodes-list">
+          @for (episode of character()?.episode; track episode) {
+            <span class="episode-chip">Episodio {{ episode.split('/').pop() }}</span>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}

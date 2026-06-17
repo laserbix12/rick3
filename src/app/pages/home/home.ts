@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   hasError = signal<boolean>(false);
 
   characters = signal<Character[]>([]);
-  isLoadingMore = signal<boolean>(false);
+  isFetchingMore = signal<boolean>(false);
   
   private currentPage = 1;
   private hasMore = true;
@@ -66,16 +66,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.loadMore$.pipe(
-      filter(() => this.hasMore && !this.loading() && !this.isLoadingMore()),
+      filter(() => this.hasMore && !this.loading() && !this.isFetchingMore()),
       tap(() => {
-        this.isLoadingMore.set(true);
+        this.isFetchingMore.set(true);
         this.currentPage++;
       }),
       switchMap(() => this.fetchCharacters(this.query(), this.currentPage)),
       takeUntil(this.destroy$)
     ).subscribe(res => {
       this.handleResponse(res, false);
-      this.isLoadingMore.set(false);
+      this.isFetchingMore.set(false);
     });
   }
 

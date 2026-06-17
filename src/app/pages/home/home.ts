@@ -6,7 +6,9 @@ import {
   signal,
   PLATFORM_ID,
   ChangeDetectionStrategy,
-  HostListener
+  ViewChild,
+  ElementRef,
+  AfterViewInit
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -23,7 +25,10 @@ import { CharacterCardComponent } from '../../components/character-card/characte
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './home.scss',
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('scrollAnchor') scrollAnchor?: ElementRef;
+  private observer: IntersectionObserver | null = null;
+  
   private characterService = inject(CharacterService);
   private platformId = inject(PLATFORM_ID);
 
@@ -32,10 +37,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   hasError = signal<boolean>(false);
 
   characters = signal<Character[]>([]);
+  isLoadingMore = signal<boolean>(false);
   
   private currentPage = 1;
   private hasMore = true;
-  private isLoadingMore = false;
   
   private query$ = toObservable(this.query);
   private destroy$ = new Subject<void>();
@@ -61,17 +66,39 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     this.loadMore$.pipe(
-      filter(() => this.hasMore && !this.loading() && !this.isLoadingMore),
+      filter(() => this.hasMore && !this.loading() && !this.isLoadingMore()),
       tap(() => {
-        this.isLoadingMore = true;
+        this.isLoadingMore.set(true);
         this.currentPage++;
       }),
       switchMap(() => this.fetchCharacters(this.query(), this.currentPage)),
       takeUntil(this.destroy$)
     ).subscribe(res => {
       this.handleResponse(res, false);
-      this.isLoadingMore = false;
+      this.isLoadingMore.set(false);
     });
+  }
+
+  ngAfterViewInit() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    this.observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        this.loadMore$.next();
+      }
+    }, { rootMargin: '200px' });
+
+    // Observar cambios para asegurar que atamos el observer cuando el elemento aparece
+    setTimeout(() => this.startObserving(), 500);
+  }
+
+  private startObserving() {
+    if (this.scrollAnchor && this.observer) {
+      this.observer.observe(this.scrollAnchor.nativeElement);
+    } else {
+      // Reintentar si el scrollAnchor aún no existe (ej. por loading = true)
+      setTimeout(() => this.startObserving(), 500);
+    }
   }
 
   private fetchCharacters(searchTerm: string, page: number) {
@@ -96,20 +123,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.characters.update(chars => isNewQuery ? res.results : [...chars, ...res.results]);
   }
 
-  @HostListener('window:scroll')
-  onScroll() {
-    if (!isPlatformBrowser(this.platformId)) return;
-    
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-    if (documentHeight - (scrollTop + windowHeight) < 400) {
-      this.loadMore$.next();
-    }
-  }
-
   ngOnDestroy(): void {
+    if (this.observer) this.observer.disconnect();
     this.destroy$.next();
     this.destroy$.complete();
   }

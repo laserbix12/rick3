@@ -1,1 +1,19 @@
-<p>favorites works!</p>
+<section class="hero-favorites">
+  <h1 class="title">My Favorites</h1>
+  <p class="subtitle">Your multi-dimensional saved characters</p>
+</section>
+
+<main class="content">
+  @if (favoritesService.favorites().length === 0) {
+    <div class="empty-state">
+      <h2>No favorites yet!</h2>
+      <p>Go to the home page and add some characters to your favorites.</p>
+    </div>
+  } @else {
+    <div class="cards-grid">
+      @for (character of favoritesService.favorites(); track character.id) {
+        <app-character-card [character]="character"></app-character-card>
+      }
+    </div>
+  }
+</main>

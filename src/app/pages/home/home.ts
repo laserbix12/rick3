@@ -13,7 +13,17 @@ import {
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { debounceTime, distinctUntilChanged, switchMap, catchError, tap, of, Subject, filter, takeUntil } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  catchError,
+  tap,
+  of,
+  Subject,
+  filter,
+  takeUntil
+} from 'rxjs';
 import { CharacterService, Character } from '../../core/services/character.service';
 import { CharacterCardComponent } from '../../components/character-card/character-card';
 
@@ -26,9 +36,10 @@ import { CharacterCardComponent } from '../../components/character-card/characte
   styleUrl: './home.scss',
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+  // El anchor siempre está en el DOM → observer nunca pierde la referencia
   @ViewChild('scrollAnchor') scrollAnchor?: ElementRef;
   private observer: IntersectionObserver | null = null;
-  
+
   private characterService = inject(CharacterService);
   private platformId = inject(PLATFORM_ID);
 
@@ -38,10 +49,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   characters = signal<Character[]>([]);
   isFetchingMore = signal<boolean>(false);
-  
+
   private currentPage = 1;
   private hasMore = true;
-  
+
   private query$ = toObservable(this.query);
   private destroy$ = new Subject<void>();
   private loadMore$ = new Subject<void>();
@@ -49,6 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
+    // Búsqueda con debounce — resetea al cambiar query
     this.query$.pipe(
       debounceTime(400),
       distinctUntilChanged(),
@@ -59,12 +71,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.hasMore = true;
         this.characters.set([]);
       }),
-      switchMap(searchTerm => this.fetchCharacters(searchTerm, this.currentPage)),
+      switchMap(term => this.fetchCharacters(term, this.currentPage)),
       takeUntil(this.destroy$)
     ).subscribe(res => {
       this.handleResponse(res, true);
     });
 
+    // Carga de más personajes al llegar al final
     this.loadMore$.pipe(
       filter(() => this.hasMore && !this.loading() && !this.isFetchingMore()),
       tap(() => {
@@ -79,25 +92,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    this.observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        this.loadMore$.next();
-      }
-    }, { rootMargin: '200px' });
+    // El anchor está SIEMPRE en el DOM → se puede observar directamente
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          this.loadMore$.next();
+        }
+      },
+      { rootMargin: '400px', threshold: 0 }
+    );
 
-    // Observar cambios para asegurar que atamos el observer cuando el elemento aparece
-    setTimeout(() => this.startObserving(), 500);
-  }
-
-  private startObserving() {
-    if (this.scrollAnchor && this.observer) {
+    if (this.scrollAnchor) {
       this.observer.observe(this.scrollAnchor.nativeElement);
-    } else {
-      // Reintentar si el scrollAnchor aún no existe (ej. por loading = true)
-      setTimeout(() => this.startObserving(), 500);
     }
   }
 
@@ -120,7 +129,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     this.hasMore = res.info?.next !== null;
-    this.characters.update(chars => isNewQuery ? res.results : [...chars, ...res.results]);
+    this.characters.update(chars =>
+      isNewQuery ? res.results : [...chars, ...res.results]
+    );
   }
 
   ngOnDestroy(): void {

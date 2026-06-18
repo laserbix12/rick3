@@ -32,13 +32,15 @@
         <app-character-card [character]="character"></app-character-card>
       }
     </div>
-    
-    <div #scrollAnchor style="height: 20px; width: 100%;"></div>
-    
-    @if (isFetchingMore()) {
-      <div class="loading-state" style="margin-top: 1rem;">
-        <div class="spinner" style="width: 30px; height: 30px; border-width: 3px;"></div>
-      </div>
-    }
   }
 </main>
+
+<!-- Anchor SIEMPRE en el DOM — el IntersectionObserver nunca pierde la referencia -->
+<div #scrollAnchor class="scroll-anchor"></div>
+
+@if (isFetchingMore()) {
+  <div class="loading-more">
+    <div class="spinner-small"></div>
+    <p>Cargando más personajes...</p>
+  </div>
+}

@@ -8,5 +8,6 @@ export const routes: Routes = [
   { path: 'details/:id', loadComponent: () => import('./pages/details/details').then(m => m.Details) },
   { path: 'documentation', loadComponent: () => import('./pages/documentation/documentation').then(m => m.DocumentationComponent) },
   { path: 'about', loadComponent: () => import('./pages/about/about').then(m => m.AboutComponent) },
+  { path: 'support', loadComponent: () => import('./pages/support/support').then(m => m.SupportComponent) },
   { path: '**', loadComponent: () => import('./pages/not-found/not-found').then(m => m.NotFound) }
 ];

@@ -7,5 +7,6 @@ export const routes: Routes = [
   { path: 'favorites', loadComponent: () => import('./pages/favorites/favorites').then(m => m.Favorites) },
   { path: 'details/:id', loadComponent: () => import('./pages/details/details').then(m => m.Details) },
   { path: 'documentation', loadComponent: () => import('./pages/documentation/documentation').then(m => m.DocumentationComponent) },
+  { path: 'about', loadComponent: () => import('./pages/about/about').then(m => m.AboutComponent) },
   { path: '**', loadComponent: () => import('./pages/not-found/not-found').then(m => m.NotFound) }
 ];

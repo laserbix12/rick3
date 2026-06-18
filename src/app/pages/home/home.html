@@ -5,7 +5,7 @@
   <div class="search-input-wrapper">
     <input 
       type="text" 
-      placeholder="Type a character name..." 
+      placeholder="Escribe el nombre de un personaje..." 
       [value]="query()" 
       (input)="query.set($any($event.target).value)"
       class="search-input"
@@ -18,13 +18,13 @@
   @if (loading()) {
     <div class="loading-state">
       <div class="spinner"></div>
-      <p>Searching the multiverse...</p>
+      <p>Buscando en el multiverso...</p>
     </div>
   } @else if (hasError() && query().trim() !== '') {
     <div class="empty-state">
-      <img src="https://rickandmortyapi.com/api/character/avatar/19.jpeg" alt="No results" class="empty-image" />
-      <h2>No characters found!</h2>
-      <p>Looks like this character doesn't exist in any dimension.</p>
+      <img src="https://rickandmortyapi.com/api/character/avatar/19.jpeg" alt="Sin resultados" class="empty-image" />
+      <h2>¡No se encontraron personajes!</h2>
+      <p>Parece que este personaje no existe en ninguna dimensión.</p>
     </div>
   } @else {
     <div class="cards-grid">

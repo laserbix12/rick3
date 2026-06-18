@@ -1,0 +1,611 @@
+<div class="docs-layout">
+  <!-- Mobile sidebar toggle -->
+  <button class="sidebar-toggle" (click)="toggleSidebar()" [class.active]="sidebarOpen()">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Sidebar Navigation -->
+  <aside class="docs-sidebar" [class.open]="sidebarOpen()">
+    <div class="sidebar-header">
+      <h3>Documentation</h3>
+    </div>
+    <nav class="sidebar-nav">
+      @for (section of navSections; track section.id) {
+        <div class="nav-group">
+          <a class="nav-link" [class.active]="activeSection() === section.id" (click)="scrollTo(section.id)">
+            {{ section.title }}
+          </a>
+          @if (section.children) {
+            <div class="nav-children">
+              @for (child of section.children; track child.id) {
+                <a class="nav-child-link" [class.active]="activeSection() === child.id" (click)="scrollTo(child.id)">
+                  {{ child.title }}
+                </a>
+              }
+            </div>
+          }
+        </div>
+      }
+    </nav>
+  </aside>
+
+  <!-- Overlay for mobile -->
+  @if (sidebarOpen()) {
+    <div class="sidebar-overlay" (click)="toggleSidebar()"></div>
+  }
+
+  <!-- Main Content -->
+  <main class="docs-content">
+
+    <!-- Introduction -->
+    <section id="introduction" class="doc-section">
+      <h1>Documentation</h1>
+      <h2>Introduction</h2>
+      <p>This documentation will help you get familiar with the resources of the <strong>Rick and Morty API</strong> and show you how to make different queries, so that you can get the most out of it.</p>
+    </section>
+
+    <!-- GraphQL -->
+    <section id="graphql" class="doc-section">
+      <h2>GraphQL</h2>
+      <p>
+        <a href="https://rickandmortyapi.com/graphql" target="_blank" class="api-link">https://rickandmortyapi.com/graphql</a>
+      </p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">GraphQL</span>
+          <button class="copy-btn" title="Copy">📋</button>
+        </div>
+        <pre><code>query &#123;
+  characters(page: 2, filter: &#123; name: "rick" &#125;) &#123;
+    info &#123;
+      count
+    &#125;
+    results &#123;
+      name
+    &#125;
+  &#125;
+  location(id: 1) &#123;
+    id
+  &#125;
+  episodesByIds(ids: [1, 2]) &#123;
+    id
+  &#125;
+&#125;</code></pre>
+      </div>
+      <p class="note-text">New to GraphQL? <a href="https://graphql.org/learn/" target="_blank" class="inline-link">check the docs here</a>.</p>
+    </section>
+
+    <!-- REST -->
+    <section id="rest" class="doc-section">
+      <h2>REST</h2>
+      <p>Base url: <code class="inline-code">https://rickandmortyapi.com/api</code></p>
+      <p>The base url contains information about all available API's resources. All requests are <code class="inline-code">GET</code> requests and go over <code class="inline-code">https</code>. All responses will return data in <code class="inline-code">json</code>.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">JSON</span>
+          <button class="copy-btn" title="Copy">📋</button>
+        </div>
+        <pre><code>GET https://rickandmortyapi.com/api
+
+&#123;
+  "characters": "https://rickandmortyapi.com/api/character",
+  "locations": "https://rickandmortyapi.com/api/location",
+  "episodes": "https://rickandmortyapi.com/api/episode"
+&#125;</code></pre>
+      </div>
+      <p>There are currently three available resources:</p>
+      <ul class="resource-list">
+        <li><a (click)="scrollTo('character')" class="inline-link">Character</a>: used to get all the characters.</li>
+        <li><a (click)="scrollTo('location')" class="inline-link">Location</a>: used to get all the locations.</li>
+        <li><a (click)="scrollTo('episode')" class="inline-link">Episode</a>: used to get all the episodes.</li>
+      </ul>
+    </section>
+
+    <!-- JavaScript client -->
+    <section id="js-client" class="doc-section">
+      <h2>JavaScript client</h2>
+      <p>The Rick and Morty API JavaScript client is a <strong>fully typed client</strong> that gives you access to the API and its features.</p>
+      <div class="link-buttons">
+        <a href="https://github.com/afuh/rick-and-morty-api-node" target="_blank" class="btn-github">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+        <a href="https://github.com/afuh/rick-and-morty-api-node#readme" target="_blank" class="btn-outline">Client reference</a>
+      </div>
+    </section>
+
+    <!-- Info and Pagination -->
+    <section id="info-pagination" class="doc-section">
+      <h2>Info and Pagination</h2>
+      <p>The API will automatically paginate the responses. You will receive up to <strong>20 documents per page</strong>.</p>
+      <p>Each resource contains an <code class="inline-code">info</code> object with information about the response.</p>
+      <div class="schema-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>count</code></td><td>int</td><td>The length of the response</td></tr>
+            <tr><td><code>pages</code></td><td>int</td><td>The amount of pages</td></tr>
+            <tr><td><code>next</code></td><td>string (url)</td><td>Link to the next page (if it exists)</td></tr>
+            <tr><td><code>prev</code></td><td>string (url)</td><td>Link to the previous page (if it exists)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">JSON</span>
+        </div>
+        <pre><code>GET https://rickandmortyapi.com/api/character
+
+&#123;
+  "info": &#123;
+    "count": 826,
+    "pages": 42,
+    "next": "https://rickandmortyapi.com/api/character?page=2",
+    "prev": null
+  &#125;,
+  "results": [
+    // ...
+  ]
+&#125;</code></pre>
+      </div>
+    </section>
+
+    <!-- ======================== CHARACTER ======================== -->
+    <section id="character" class="doc-section">
+      <h2>Character</h2>
+    </section>
+
+    <section id="character-schema" class="doc-section">
+      <h3>Character schema</h3>
+      <div class="schema-table">
+        <table>
+          <thead>
+            <tr><th>Key</th><th>Type</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>int</td><td>The id of the character</td></tr>
+            <tr><td><code>name</code></td><td>string</td><td>The name of the character</td></tr>
+            <tr><td><code>status</code></td><td>string</td><td>The status of the character ('Alive', 'Dead' or 'unknown')</td></tr>
+            <tr><td><code>species</code></td><td>string</td><td>The species of the character</td></tr>
+            <tr><td><code>type</code></td><td>string</td><td>The type or subspecies of the character</td></tr>
+            <tr><td><code>gender</code></td><td>string</td><td>The gender of the character ('Female', 'Male', 'Genderless' or 'unknown')</td></tr>
+            <tr><td><code>origin</code></td><td>object</td><td>Name and link to the character's origin location</td></tr>
+            <tr><td><code>location</code></td><td>object</td><td>Name and link to the character's last known location</td></tr>
+            <tr><td><code>image</code></td><td>string (url)</td><td>Link to the character's image (300x300px)</td></tr>
+            <tr><td><code>episode</code></td><td>array (urls)</td><td>List of episodes in which this character appeared</td></tr>
+            <tr><td><code>url</code></td><td>string (url)</td><td>Link to the character's own URL endpoint</td></tr>
+            <tr><td><code>created</code></td><td>string</td><td>Time at which the character was created in the database</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="get-all-characters" class="doc-section">
+      <h3>Get all characters</h3>
+      <p>You can access the list of characters by using the <code class="inline-code">/character</code> endpoint.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/character</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">JSON Response</span></div>
+        <pre><code>&#123;
+  "info": &#123;
+    "count": 826,
+    "pages": 42,
+    "next": "https://rickandmortyapi.com/api/character?page=2",
+    "prev": null
+  &#125;,
+  "results": [
+    &#123;
+      "id": 1,
+      "name": "Rick Sanchez",
+      "status": "Alive",
+      "species": "Human",
+      "type": "",
+      "gender": "Male",
+      "origin": &#123;
+        "name": "Earth (C-137)",
+        "url": "https://rickandmortyapi.com/api/location/1"
+      &#125;,
+      "location": &#123;
+        "name": "Citadel of Ricks",
+        "url": "https://rickandmortyapi.com/api/location/3"
+      &#125;,
+      "image": "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+      "episode": [
+        "https://rickandmortyapi.com/api/episode/1",
+        // ...
+      ],
+      "url": "https://rickandmortyapi.com/api/character/1",
+      "created": "2017-11-04T18:48:46.250Z"
+    &#125;,
+    // ...
+  ]
+&#125;</code></pre>
+      </div>
+    </section>
+
+    <section id="get-single-character" class="doc-section">
+      <h3>Get a single character</h3>
+      <p>You can get a single character by adding the <code class="inline-code">id</code> as a parameter: <code class="inline-code">/character/2</code></p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/character/2</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">JSON Response</span></div>
+        <pre><code>&#123;
+  "id": 2,
+  "name": "Morty Smith",
+  "status": "Alive",
+  "species": "Human",
+  "type": "",
+  "gender": "Male",
+  "origin": &#123;
+    "name": "unknown",
+    "url": ""
+  &#125;,
+  "location": &#123;
+    "name": "Citadel of Ricks",
+    "url": "https://rickandmortyapi.com/api/location/3"
+  &#125;,
+  "image": "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
+  "episode": [
+    "https://rickandmortyapi.com/api/episode/1",
+    // ...
+  ],
+  "url": "https://rickandmortyapi.com/api/character/2",
+  "created": "2017-11-04T18:50:21.651Z"
+&#125;</code></pre>
+      </div>
+    </section>
+
+    <section id="get-multiple-characters" class="doc-section">
+      <h3>Get multiple characters</h3>
+      <p>You can get multiple characters by adding an array of <code class="inline-code">ids</code> as parameter: <code class="inline-code">/character/[1,2,3]</code></p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/character/1,183</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">JSON Response</span></div>
+        <pre><code>[
+  &#123;
+    "id": 1,
+    "name": "Rick Sanchez",
+    // ...
+  &#125;,
+  &#123;
+    "id": 183,
+    "name": "Johnny Depp",
+    // ...
+  &#125;
+]</code></pre>
+      </div>
+    </section>
+
+    <section id="filter-characters" class="doc-section">
+      <h3>Filter characters</h3>
+      <p>You can also include filters in the URL by including additional query parameters. To start filtering add a <code class="inline-code">?</code> followed by the query <code class="inline-code">&lt;query&gt;=&lt;value&gt;</code>. If you want to chain several queries in the same call, use <code class="inline-code">&amp;</code> followed by the query.</p>
+      <p>Available parameters:</p>
+      <div class="schema-table">
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>name</code></td><td>string</td><td>Filter by the given name</td></tr>
+            <tr><td><code>status</code></td><td>string</td><td>Filter by the given status (alive, dead or unknown)</td></tr>
+            <tr><td><code>species</code></td><td>string</td><td>Filter by the given species</td></tr>
+            <tr><td><code>type</code></td><td>string</td><td>Filter by the given type</td></tr>
+            <tr><td><code>gender</code></td><td>string</td><td>Filter by the given gender (female, male, genderless or unknown)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/character/?name=rick&status=alive</code></pre>
+      </div>
+    </section>
+
+    <!-- ======================== LOCATION ======================== -->
+    <section id="location" class="doc-section">
+      <h2>Location</h2>
+    </section>
+
+    <section id="location-schema" class="doc-section">
+      <h3>Location schema</h3>
+      <div class="schema-table">
+        <table>
+          <thead><tr><th>Key</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>int</td><td>The id of the location</td></tr>
+            <tr><td><code>name</code></td><td>string</td><td>The name of the location</td></tr>
+            <tr><td><code>type</code></td><td>string</td><td>The type of the location</td></tr>
+            <tr><td><code>dimension</code></td><td>string</td><td>The dimension in which the location is located</td></tr>
+            <tr><td><code>residents</code></td><td>array (urls)</td><td>List of character who have been last seen in the location</td></tr>
+            <tr><td><code>url</code></td><td>string (url)</td><td>Link to the location's own endpoint</td></tr>
+            <tr><td><code>created</code></td><td>string</td><td>Time at which the location was created in the database</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="get-all-locations" class="doc-section">
+      <h3>Get all locations</h3>
+      <p>You can access the list of locations by using the <code class="inline-code">/location</code> endpoint.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/location</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">JSON Response</span></div>
+        <pre><code>&#123;
+  "info": &#123;
+    "count": 126,
+    "pages": 7,
+    "next": "https://rickandmortyapi.com/api/location?page=2",
+    "prev": null
+  &#125;,
+  "results": [
+    &#123;
+      "id": 1,
+      "name": "Earth (C-137)",
+      "type": "Planet",
+      "dimension": "Dimension C-137",
+      "residents": [
+        "https://rickandmortyapi.com/api/character/38",
+        // ...
+      ],
+      "url": "https://rickandmortyapi.com/api/location/1",
+      "created": "2017-11-10T12:42:04.162Z"
+    &#125;,
+    // ...
+  ]
+&#125;</code></pre>
+      </div>
+    </section>
+
+    <section id="get-single-location" class="doc-section">
+      <h3>Get a single location</h3>
+      <p>You can get a single location by adding the <code class="inline-code">id</code> as a parameter: <code class="inline-code">/location/3</code></p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/location/3</code></pre>
+      </div>
+    </section>
+
+    <section id="get-multiple-locations" class="doc-section">
+      <h3>Get multiple locations</h3>
+      <p>You can get multiple locations by adding an array of <code class="inline-code">ids</code> as parameter: <code class="inline-code">/location/[1,2,3]</code></p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/location/1,2,3</code></pre>
+      </div>
+    </section>
+
+    <section id="filter-locations" class="doc-section">
+      <h3>Filter locations</h3>
+      <p>Available parameters:</p>
+      <div class="schema-table">
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>name</code></td><td>string</td><td>Filter by the given name</td></tr>
+            <tr><td><code>type</code></td><td>string</td><td>Filter by the given type</td></tr>
+            <tr><td><code>dimension</code></td><td>string</td><td>Filter by the given dimension</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/location/?name=earth</code></pre>
+      </div>
+    </section>
+
+    <!-- ======================== EPISODE ======================== -->
+    <section id="episode" class="doc-section">
+      <h2>Episode</h2>
+    </section>
+
+    <section id="episode-schema" class="doc-section">
+      <h3>Episode schema</h3>
+      <div class="schema-table">
+        <table>
+          <thead><tr><th>Key</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>int</td><td>The id of the episode</td></tr>
+            <tr><td><code>name</code></td><td>string</td><td>The name of the episode</td></tr>
+            <tr><td><code>air_date</code></td><td>string</td><td>The air date of the episode</td></tr>
+            <tr><td><code>episode</code></td><td>string</td><td>The code of the episode</td></tr>
+            <tr><td><code>characters</code></td><td>array (urls)</td><td>List of characters who have been seen in the episode</td></tr>
+            <tr><td><code>url</code></td><td>string (url)</td><td>Link to the episode's own endpoint</td></tr>
+            <tr><td><code>created</code></td><td>string</td><td>Time at which the episode was created in the database</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="get-all-episodes" class="doc-section">
+      <h3>Get all episodes</h3>
+      <p>You can access the list of episodes by using the <code class="inline-code">/episode</code> endpoint.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/episode</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">JSON Response</span></div>
+        <pre><code>&#123;
+  "info": &#123;
+    "count": 51,
+    "pages": 3,
+    "next": "https://rickandmortyapi.com/api/episode?page=2",
+    "prev": null
+  &#125;,
+  "results": [
+    &#123;
+      "id": 1,
+      "name": "Pilot",
+      "air_date": "December 2, 2013",
+      "episode": "S01E01",
+      "characters": [
+        "https://rickandmortyapi.com/api/character/1",
+        // ...
+      ],
+      "url": "https://rickandmortyapi.com/api/episode/1",
+      "created": "2017-11-10T12:56:33.798Z"
+    &#125;,
+    // ...
+  ]
+&#125;</code></pre>
+      </div>
+    </section>
+
+    <section id="get-single-episode" class="doc-section">
+      <h3>Get a single episode</h3>
+      <p>You can get a single episode by adding the <code class="inline-code">id</code> as a parameter: <code class="inline-code">/episode/28</code></p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/episode/28</code></pre>
+      </div>
+    </section>
+
+    <section id="get-multiple-episodes" class="doc-section">
+      <h3>Get multiple episodes</h3>
+      <p>You can get multiple episodes by adding an array of <code class="inline-code">ids</code> as parameter: <code class="inline-code">/episode/[1,2,3]</code></p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/episode/1,2,3</code></pre>
+      </div>
+    </section>
+
+    <section id="filter-episodes" class="doc-section">
+      <h3>Filter episodes</h3>
+      <p>Available parameters:</p>
+      <div class="schema-table">
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>name</code></td><td>string</td><td>Filter by the given name</td></tr>
+            <tr><td><code>episode</code></td><td>string</td><td>Filter by the given episode code</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTTP</span></div>
+        <pre><code>GET https://rickandmortyapi.com/api/episode/?episode=S01</code></pre>
+      </div>
+    </section>
+
+    <!-- ======================== LIBRARIES ======================== -->
+    <section id="libraries" class="doc-section">
+      <h2>Libraries</h2>
+      <p>Here you will find a list of helper libraries to access the API in your preferred programming language.</p>
+    </section>
+
+    <section id="lib-dart" class="doc-section lib-section">
+      <h3>Dart</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge dart">Dart</span>
+        <a href="https://pub.dev/packages/rick_and_morty_api" target="_blank" class="lib-link">rick_and_morty_api</a>
+        <span class="lib-by">by Jeann Aguilar</span>
+      </div>
+    </section>
+
+    <section id="lib-elixir" class="doc-section lib-section">
+      <h3>Elixir</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge elixir">Elixir</span>
+        <a href="https://hex.pm/packages/exrick" target="_blank" class="lib-link">ExRick</a>
+        <span class="lib-by">by Hez Ronning</span>
+      </div>
+    </section>
+
+    <section id="lib-go" class="doc-section lib-section">
+      <h3>Go</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge go">Go</span>
+        <a href="https://github.com/pitakill/rickandmortyapigowrapper" target="_blank" class="lib-link">The Rick and Morty API Go client</a>
+        <span class="lib-by">by Leopoldo Caballero</span>
+      </div>
+    </section>
+
+    <section id="lib-java" class="doc-section lib-section">
+      <h3>Java</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge java">Java</span>
+        <a href="https://github.com/adrianodelvigna/rick-and-morty-api-java-client" target="_blank" class="lib-link">Rick and Morty API Java Client</a>
+        <span class="lib-by">by Adriano Del Vigna</span>
+      </div>
+    </section>
+
+    <section id="lib-dotnet" class="doc-section lib-section">
+      <h3>.NET</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge dotnet">.NET</span>
+        <a href="https://github.com/Carlj28/RickAndMorty.Net.Api" target="_blank" class="lib-link">RickAndMorty.Net.Api</a>
+        <span class="lib-by">by Carl-Johan Johansson</span>
+      </div>
+    </section>
+
+    <section id="lib-php" class="doc-section lib-section">
+      <h3>PHP</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge php">PHP</span>
+        <a href="https://github.com/nickbeen/rick-and-morty-api-php" target="_blank" class="lib-link">rick-and-morty-api-php</a>
+        <span class="lib-by">by Nick Been</span>
+      </div>
+    </section>
+
+    <section id="lib-python" class="doc-section lib-section">
+      <h3>Python</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge python">Python</span>
+        <a href="https://github.com/curiousrohan/ramapi" target="_blank" class="lib-link">Python Rick and Morty API</a>
+        <span class="lib-by">by Rohan Hazra</span>
+      </div>
+    </section>
+
+    <section id="lib-r" class="doc-section lib-section">
+      <h3>R</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge r">R</span>
+        <a href="https://github.com/MikeJohnPage/mortyr" target="_blank" class="lib-link">mortyr</a>
+        <span class="lib-by">by Mike Page</span>
+      </div>
+    </section>
+
+    <section id="lib-ruby" class="doc-section lib-section">
+      <h3>Ruby</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge ruby">Ruby</span>
+        <a href="https://github.com/spielhoelle/rick-and-morty-gem" target="_blank" class="lib-link">rick-and-morty-gem</a>
+        <span class="lib-by">by Tommy Spielhoelle</span>
+      </div>
+    </section>
+
+    <section id="lib-rust" class="doc-section lib-section">
+      <h3>Rust</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge rust">Rust</span>
+        <a href="https://crates.io/crates/rick-and-morty" target="_blank" class="lib-link">rick-and-morty</a>
+        <span class="lib-by">by dshomoern</span>
+      </div>
+    </section>
+
+    <section id="lib-swift" class="doc-section lib-section">
+      <h3>Swift</h3>
+      <div class="lib-card">
+        <span class="lib-lang-badge swift">Swift</span>
+        <a href="https://github.com/benjaminbrk/rick-morty-swift-api" target="_blank" class="lib-link">Rick Morty Swift API</a>
+        <span class="lib-by">by Benjamin Brk</span>
+      </div>
+    </section>
+
+  </main>
+</div>
